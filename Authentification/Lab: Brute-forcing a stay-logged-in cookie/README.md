@@ -11,7 +11,7 @@
 - **「Stay logged in」チェックを ON**
 
 ### ② Cookie を確認  
-Burp → Proxy → HTTP history  
+HTTP history で
 `POST /login` のレスポンスにある：
 
 ```
