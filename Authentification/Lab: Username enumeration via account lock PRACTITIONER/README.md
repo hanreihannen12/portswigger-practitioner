@@ -45,6 +45,22 @@ Lab: Username enumeration via account lock
 
 > 💡 これで各ユーザー名が**5回ずつ**送信される = アカウントロックを意図的に発動させる
 
+alice + 空（1回目）
+alice + 空（2回目）
+alice + 空（3回目）
+alice + 空（4回目）
+alice + 空（5回目） ← alice ロック
+
+bob   + 空（1回目）
+bob   + 空（2回目）
+bob   + 空（3回目）
+bob   + 空（4回目）
+bob   + 空（5回目） ← bob ロック
+
+carlos + 空 ×5回
+...
+こんな感じ
+
 ---
 
 ## ステップ4：攻撃スタート＆結果確認
