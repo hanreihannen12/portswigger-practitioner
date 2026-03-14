@@ -12,7 +12,7 @@
 
 ### Step 2: リクエストをBurp Repeaterに送る
 
-1. Burp → **Proxy → HTTP history** を開く
+1. HTTP history** を開く
 2. `POST /forgot-password?temp-forgot-password-token=...` を探す
 3. 右クリック → **Send to Repeater**
 
