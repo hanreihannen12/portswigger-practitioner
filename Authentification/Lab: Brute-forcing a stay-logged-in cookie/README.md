@@ -42,7 +42,7 @@ stay-logged-in = base64(username + ":" + md5(password))
 `/logout` を実行。
 
 ### ② `/my-account?id=wiener` のリクエストを Intruder に送る  
-Burp → Proxy → HTTP history  
+HTTP history  で
 `GET /my-account?id=wiener` を右クリック → **Send to Intruder**
 
 ### ③ Intruder の Positions  
