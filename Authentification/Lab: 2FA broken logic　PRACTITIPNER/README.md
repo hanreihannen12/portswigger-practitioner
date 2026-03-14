@@ -33,6 +33,8 @@ Cookie: session=xxxx; account=carlos
 3. Send  
 → これで **サーバーが carlos の 2FA コードを生成**する
 
+このラボの 2FA コードは “固定” じゃなくて “毎回サーバーが生成するワンタイムコード”だから毎回違う2FAコードが生成される。
+
 ---
 
 ## Step3: POST /login2 を Intruder に送ってブルートフォース
