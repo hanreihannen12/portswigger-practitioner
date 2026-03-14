@@ -9,7 +9,7 @@ Lab: Username enumeration via account lock
 1. ラボを開いて、Burp SuiteのInterceptをONにする
 2. ログインページで**でたらめなユーザー名・パスワード**を入力してログインボタンを押す
    - 例：username = `test`、password = `test`
-3. BurpのProxy → HTTP historyで `POST /login` のリクエストを右クリック
+3.HTTP historyで `POST /login` のリクエストを右クリック
 4. **「Send to Intruder」** をクリック
 
 ---
