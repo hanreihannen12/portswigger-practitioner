@@ -248,7 +248,12 @@ x'%3BSELECT+CASE+WHEN+(username='administrator'+AND+substring(password,1,1)='a')
 ```
 substring(password,1,1)='§a§'
 ```
+substring(password, 2, 1) の “1” は「取り出す文字数」や。
 
+つまり：
+
+• 2 → 開始位置（2文字目から）
+• 1 → 何文字取るか（1文字だけ）
 ---
 
 ## Step 10: Payload リスト設定
