@@ -1,9 +1,7 @@
-## Lab: Web shell upload via obfuscated file extension
-	# ファイルアップロード脆弱性 - Null Byte インジェクション
 
 ## 概要
 
-このラボのポイントは、サーバーが `.php` をブラックリストでブロックしているのに、**Null バイト (`%00`)** を使って検証を騙すことです。
+このラボのポイントは、サーバーが `.php` をブラックリストでブロックしているのに、**Null バイト (`%00`)** を使って検証を騙すこと
 
 ```
 exploit.php%00.jpg
@@ -171,7 +169,7 @@ Content-Type: image/jpeg
 Content-Type: application/x-php
 「このファイルはPHPですよ」と伝える。
 
-**でも正直なところ、**このラボでは Content-Type の変更はあまり重要ではない。
+**このラボでは Content-Type の変更はあまり重要ではない。
 サーバーが本当に検証しているのはファイル名の拡張子だけだったから。
 厳しいサーバー → Content-Type も チェックする
 このラボのサーバー → ファイル名の拡張子だけチェック
