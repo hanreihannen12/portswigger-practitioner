@@ -232,7 +232,7 @@ cookie = base64(username + ":" + expiry + ":" + HMAC(secret, username+expiry))
 
 ---
 
-# 🧠 まとめ（面接でそのまま言えるレベル）
+# 🧠 まとめ
 ```
 この脆弱性は、永続ログイン Cookie が
 base64(username:md5(password)) という予測可能な構造で、
