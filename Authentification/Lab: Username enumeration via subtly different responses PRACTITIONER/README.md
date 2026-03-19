@@ -1,6 +1,3 @@
-## 完全版 手順書（修正済み）
-
----
 
 ## STEP 1：ダミーログインでリクエストをキャプチャ
 
@@ -102,36 +99,7 @@
 3. Password：STEP 8 でメモしたパスワード
 4. **「Log in」** をクリック
 5. `/my-account` ページに遷移できたら **ラボ完了！**
-	2つのラボの違い
-
-前のラボ（簡単バージョン）
-エラーメッセージがはっきり違うやつやった。
-状況エラーメッセージ存在しないユーザーInvalid username存在するユーザーIncorrect password
-メッセージが全然違うから、Length（レスポンスの長さ）でソートするだけで一発でわかった。
-
-今のラボ（難しいバージョン）
-エラーメッセージがほぼ同じやつ。
-状況エラーメッセージ存在しないユーザーInvalid username or password.存在するユーザーInvalid username or password 
-違いがピリオドの有無だけやから、Length でソートしても気づきにくい。だから Grep - Extract でエラーメッセージを抽出して直接比較する必要があった。
-
-まとめ
-
-前のラボ → メッセージが違うから簡単に見つかる
-今のラボ → メッセージがほぼ同じやから Grep - Extract で細かく比較する必要がある
-
-「Subtly different（微妙に違う）」 ってラボ名の意味がそこにあるで！でもlengthのとこクリックしたらすぺーすのやつ一番上に北出9:54ユーザーがソート機能で同じ結果が得られることに気づいた。The user is saying that even in the current lab, clicking the Length column to sort showed the different response at the top (because the trailing space vs period makes a 1-character length difference). So they're questioning why Grep - Extract is needed if Length sorting works too.完了それでも正解や！
-Length でソートしても見つかる理由は、末尾のスペースと ピリオドで 1文字分だけ長さが違うから。
-
-じゃあ Grep - Extract いらんの？
-
-このラボなら Length でも解ける。
-でも現実のペネトレーションテストでは…
-状況LengthGrep - Extract1文字の違い△ ギリ気づける◎ 確実にわかる広告やランダムな要素でLength がバラバラ✕ 全然使えない◎ 確実にわかるレスポンスの内容で判断したい✕ 無理◎ 確実にわかる
-
-つまり
-
-Length でたまたま見つかったのはラッキーなケースで、Grep - Extract は確実に見つけるための方法やで！
-
+	
 
 
 <br>
@@ -221,7 +189,7 @@ Length でたまたま見つかったのはラッキーなケースで、Grep - 
 
 ---
 
-# 🎤 **30秒面接回答（そのまま言えるやつ）**
+# 🎤 **まとめ**
 
 > この脆弱性は、ログインエラーのメッセージが微妙に異なることでユーザー名が列挙できてしまう問題です。  
 > 実際には「ピリオドの有無」や「末尾スペース」など1文字の差で、レスポンスの長さや抽出したメッセージを比較すると存在するユーザーを特定できます。  
@@ -230,10 +198,5 @@ Length でたまたま見つかったのはラッキーなケースで、Grep - 
 
 ---
 
-# 🎤 **さらに短い15秒版**
-
-> エラーメッセージの微妙な差異でユーザー名が判別できる脆弱性です。  
-> レスポンスの長さや内容を比較して存在するユーザーを特定し、その後パスワードを総当たりします。  
-> 対策はエラーメッセージの完全統一とレートリミットです。
 
 ---
