@@ -190,19 +190,19 @@ Referer: https://xxxxx.web-security-academy.net/admin
 
 ---
 
-# ⚡ **30秒面接用まとめ（和志のスタイルに最適化）**
+# ⚡ **まとめ**
 
 ```
 この問題は、管理者の2ステップ操作のうち、
 2つ目の「Upgrade 確認リクエスト」だけアクセス制御が欠落している
-Broken Access Control です。
+Broken Access Control 。
 
 管理者で正規操作を行い、その2つ目のリクエストを Burp で取得。
 Repeater で username を wiener に書き換え、
 Cookie を wiener のセッションに差し替えて送ると、
-権限チェックが無いため一般ユーザーでも管理者化できます。
+権限チェックが無いため一般ユーザーでも管理者化できる。
 
 対策は、全ての重要操作でサーバー側の権限チェックを行い、
-UI のステップ数に依存しないことです。
+UI のステップ数に依存しないこと。
 ```
 
