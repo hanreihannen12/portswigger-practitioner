@@ -182,4 +182,4 @@ UNION SELECT BANNER, NULL FROM v$version--'
 ---
 
 
-どれでも行ける。
+
