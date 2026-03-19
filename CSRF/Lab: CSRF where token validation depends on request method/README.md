@@ -1,20 +1,6 @@
 
 ---
 
-# CSRF Token Bypass (Method Validation)  
-## PortSwigger Lab：超細かい完全手順書（Markdown版）
-
----
-
-## 【準備】Burp Suite起動
-
-1. **Burp Suite Community Edition** を起動  
-2. 上のタブから **Proxy** をクリック  
-3. **Open Browser** をクリック  
-   → Burp のブラウザが開く
-
----
-
 ## 【STEP 1】ログイン
 
 1. Burp のブラウザでラボの URL を開く  
@@ -157,15 +143,9 @@ GET /my-account/change-email?email=attacker@evil.com
 2. **Deliver to victim** をクリック  
 3. ラボに **Congratulations!** が出たらクリア 🎉
 
----
-
-了解、和志。  
-このラボ（**CSRF Token Bypass – Method Validation**）を、面接でそのまま使えるレベルで **「どんな脆弱性か → どう気づくか → どう攻撃するか → どう対策するか」** の4点セット＋**30秒版**にまとめたよ。  
-和志の「温度のある説明スタイル」に合わせて、抽象化しすぎず、現場での理解に近い形で整理してある。
 
 ---
 
-# 🔥 CSRF Token Bypass（Method Validation）まとめ
 
 ## 1. **どーいう脆弱性？**
 
