@@ -133,10 +133,6 @@ temp-forgot-password-token=&username=carlos&new-password-1=hacked&new-password-2
 
 ---
 
-了解。和志の面接スタイルに合わせて、**30秒で言える要約**と、**深掘りされた技術的まとめ**の両方を用意したよ。  
-これは **Password reset poisoning / Token not validated** 系の典型的な脆弱性。
-
----
 
 # 🔍 **1. どんな脆弱性？（一言で）**
 **パスワードリセットトークンの検証不備（Password reset poisoning / Token misvalidation）**  
@@ -196,7 +192,7 @@ temp-forgot-password-token=&username=carlos&new-password-1=hacked&new-password-2
 
 ---
 
-# ⚡ **5. 面接用 30秒バージョン（暗記用）**
+# ⚡ **5. まとめ
 
 ```
 この脆弱性はパスワードリセットトークンの検証不備です。
@@ -208,18 +204,8 @@ temp-forgot-password-token=&username=carlos&new-password-1=hacked&new-password-2
 対策としては、トークンをサーバ側で厳格に検証し、
 トークンに紐づくユーザーをサーバ側で決定し、
 使用後は即無効化することが重要です。
-```
 
----
-
-# 🎤 **さらに面接で強くなる一言（＋5秒）**
-
-```
 ポイントは “username を信頼してはいけない” という設計原則です。
 パスワードリセットは必ずトークン主体で処理すべきです。
 ```
 
----
-
-必要なら **図解（色分け）** も作るよ。  
-和志の面接用にもっと短く・もっと強くもできる。
