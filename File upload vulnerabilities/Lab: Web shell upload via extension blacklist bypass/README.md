@@ -255,7 +255,7 @@ GET /files/avatars/exploit.l33t
 
 🟧 混乱してたポイント
 
-和志の頭の中ではこうなってた：
+自分の頭の中ではこうなってた：
 
 • 「.htaccess をアップロードした」
 • 「でも exploit.l33t は作ってない」
@@ -279,7 +279,7 @@ GET /files/avatars/exploit.l33t
 
 ---
 
-🟩 まとめ（和志用に最短）
+🟩 まとめ
 
 • .htaccess と exploit.l33t は 別ファイル
 • どっちも POST でサーバーに置いてる
