@@ -141,90 +141,97 @@ Set-Cookie: csrf=fake
 ```
 
 ---
+HTTPメソッドでアクセス制御をすり抜ける脆弱性
 
-### ✅ どーいう脆弱性？
+## どんな脆弱性？
 
-**Double Submit Cookie方式のCSRF防御が「形だけ」で、  
-`csrf` Cookie と リクエストパラメータが一致していれば誰の値でも通ってしまう脆弱性。**
+「メソッドベースのアクセス制御バイパス」 や 「HTTPバーブタンパリング」 って呼ばれる脆弱性。
 
-本来なら：
+超シンプルに言うと：
 
-- CSRFトークンは「ユーザーのセッション」と紐付くべきやのに  
-- この実装は「Cookieのcsrf」と「Bodyのcsrf」が同じかどうかしか見てない  
-- さらに、アプリ内の別機能で **任意の`csrf` Cookieを植え込める（CRLFでSet-Cookie注入）**
+サーバーが「POSTはダメ」ってチェックしてるのに、GETは見てへんかった
 
-→ 攻撃者が好きなCSRFトークンを「正しいもの」としてサーバに信じ込ませられる。
+## どう気づく？（攻撃者視点）
 
----
+ポイントはこの2ステップの気づき：
 
-### 🔍 どう気づいた？
+気づき①「管理者機能のエンドポイントが分かった」
 
-1. メール変更リクエストをBurpでキャプチャ  
-   ```http
-   Cookie: session=...; csrf=R8ov2...
-   ...
-   email=test@test.com&csrf=R8ov2...
-   ```
-2. Repeaterでテスト：
-   - **CSRFだけ変える** → エラー  
-   - **CookieとBodyのcsrfを同じ偽物に変える** → 成功  
-   → 「検証は *値の一致* だけで、ユーザーとは紐付いてない」と判明
-3. 検索機能のレスポンスで `Set-Cookie: Last-Search=...` を確認  
-4. `?search=test%0d%0aSet-Cookie:%20csrf=fake` を投げて  
-   `Set-Cookie: csrf=fake` がレスポンスに出るのを確認  
-   → **CRLFで任意のcsrf Cookieを注入できる** と確定
+管理者でログインしてUpgrade操作したら /admin-roles に username=wiener&action=upgrade を送ってるのが見えた。
 
----
+→「このエンドポイントに直接リクエスト投げたらどうなる？」
 
-### 💥 どう攻撃してる？
+気づき②「POSTは弾かれたけど、GETは試してへん」
 
-攻撃チェーンはこう：
+一般ユーザーのセッションでPOSTしたら 401 Unauthorized。
 
-1. 検索パラメータにCRLFを仕込んで、victimブラウザに  
-   `Set-Cookie: csrf=fake; SameSite=None` を植え込む  
-2. 同じページ内で、自動送信フォームを用意：
+→「メソッドを変えたらどうなる？」←ここが発想のキモ
 
-   ```html
-   <form action="/my-account/change-email" method="POST">
-     <input type="hidden" name="email" value="hacker@evil.com">
-     <input type="hidden" name="csrf" value="fake">
-   </form>
-   <img src="/?search=test%0d%0aSet-Cookie:%20csrf=fake%3b%20SameSite=None"
-        onerror="document.forms[0].submit()">
-   ```
+GETに変えると、パラメータはURLのクエリストリングに移動する：
 
-3. victimがこのページを開くと：
-   - まず `csrf=fake` Cookie がセットされる  
-   - 画像読み込み失敗 → `onerror` でフォーム自動送信  
-   - リクエストは：
-     ```http
-     Cookie: csrf=fake
-     Body: email=hacker@evil.com&csrf=fake
-     ```
-4. サーバーは「CookieのcsrfとBodyのcsrfが一致してるからOK」と判断  
-   → **victimのメールアドレスが攻撃者指定の値に変更される**
+POST /admin-roles        →  GET /admin-roles?username=wiener&action=upgrade
+body: username=wiener...     (bodyなし)
 
----
 
-### 🛡️ どう対策する？
+これを送ったら 302 Found（成功）→ 穴発見。
 
-**設計レベルで直さなあかんやつ。**
+なぜ通った？（サーバー側で何が起きてたか）
 
-- **CSRFトークンをセッションと紐付ける**
-  - 例：`token = HMAC(sessionID, secret)` など  
-  - 「誰のトークンか」を必ず検証する
-- **Double Submitを使うなら「値の一致＋ユーザー紐付け」までやる**
-- **任意のCookieを注入できる入力（CRLF）をサニタイズ**
-  - ヘッダーに反映される値は `\r\n` を禁止
-- **SameSite=Lax/Strictの活用**
-- **検索語などをそのままSet-Cookieに入れない**
+サーバーの実装がこんな感じになってた（イメージ）：
 
----
+# 🔴 ダメな実装
+if request.method == "POST" and path == "/admin-roles":
+    if not is_admin(session):
+        return 401  # POSTだけチェック
+    do_upgrade(username)
 
-### 🎤 まとめ
+# GETの場合はこのチェックを通らないまま処理される
+if path == "/admin-roles":
+    username = request.GET.get("username")
+    do_upgrade(username)  # ← チェックなしで実行される！
 
-> **このケースは、Double Submit Cookie方式のCSRF防御が不完全で、`csrf` Cookie とリクエストパラメータの値が一致していれば、誰の値でも受け入れてしまう脆弱性です。**  
-> BurpでCSRFトークンだけ変えるとエラーになる一方、CookieとBodyのcsrfを同じ偽物にすると成功したことで気づきました。さらに、検索機能にCRLFを入れることで `Set-Cookie: csrf=fake` を注入できるため、攻撃者は任意のCSRFトークンをvictimに植え付け、自動送信フォームでメール変更を実行できます。  
-> 対策としては、CSRFトークンをセッションと厳密に紐付けること、ヘッダーに入る値のCRLFサニタイズ、そしてDouble Submitを使う場合でも「値の一致だけに頼らない設計」にすることが重要です。
 
----
+つまり 「POSTだけ見張って、GETは素通りさせてた」 状態。
+
+## 攻撃の流れ（まとめ）
+
+①管理者セッションでリクエストの形を把握（偵察）
+         ↓
+②一般ユーザーのセッションでPOST → 401（壁を確認）
+         ↓
+③GETに変換して送る → 302（壁に穴を発見）
+         ↓
+④一般ユーザーが管理者に昇格（権限昇格成功）
+
+
+## どう対策するか
+
+✅ 正しい対策
+
+「メソッドに関係なく、エンドポイントへのアクセス自体を制御する」
+
+# 🟢 正しい実装
+if path == "/admin-roles":
+    if not is_admin(session):  # メソッド問わずここで弾く
+        return 401
+    
+    # POSTかGETかに関係なくパラメータ取得
+    username = request.POST.get("username") or request.GET.get("username")
+    do_upgrade(username)
+
+
+他にも：
+
+
+
+|対策                 |内容                                        |
+|-------------------|------------------------------------------|
+|**エンドポイント単位で認可**   |メソッドではなく「このURLは管理者のみ」と定義                  |
+|**GETで状態変更しない**    |変更系の操作はPOST/PUT/DELETEのみに限定（REST原則）       |
+|**フレームワークの認可機能を使う**|自前チェックより Spring Security や Django の権限管理を使う|
+
+一言でまとめると
+
+「POST はチェックしたけど GET は忘れてた」 という実装ミスを、メソッド変換でつついた攻撃。
+
+認可チェックは 「どのメソッドか」じゃなく「誰が何にアクセスするか」 で判断せなあかん、というのがこのラボの教訓やで。​​​​​​​​​​​​​​​​
