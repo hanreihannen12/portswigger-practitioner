@@ -24,6 +24,8 @@ email=test@test.com&csrf=R8ov2YBfTYmzFyjit8o2hKBuoIjXXVpa
 
 ### Step 3: Double Submit防御を確認
 
+Double Submit防御とはCSRFトークンを「Cookie」と「リクエストパラメータ」の両方に入れて、その2つが一致してるかチェックする仕組み。
+
 1. このリクエストを右クリック → "Send to Repeater"
 2. Repeaterで以下をテスト：
 
