@@ -73,7 +73,9 @@ Set-Cookie: csrf=fake
 
 ### Step 5: SameSite属性を追加
 
-クロスサイトでもcookieが送信されるように`SameSite=None`を追加：
+samesiteは同じサイトじゃないとcookie渡さないやつやからevil.comとexample.comは別なのでcookieがおくれない
+
+そこでクロスサイトでもcookieが送信されるように`SameSite=None`を追加：(別サイトでもクッキー送っていいよ)に変えるため。
 
 ```
 /?search=test%0d%0aSet-Cookie:%20csrf=fake%3b%20SameSite=None
