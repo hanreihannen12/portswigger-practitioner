@@ -1,89 +1,58 @@
 
+# DOM XSS ラボ手順
+
 ## ① Burp Suite を開く
-- Burp Suite のウィンドウを開く  
-- 上部タブから **「Proxy」** をクリック
 
----
+- Burp Suite のウィンドウを開く
+- Intercept は **OFF** のままでOK
 
-## ② Intercept を ON にする
-- Proxy 内の小タブ **「Intercept」** をクリック  
-- ボタンが **「Intercept is off」**（赤）なら押して  
-  **「Intercept is on」**（緑）にする
+## ② ラボのサイトに行く
 
----
-
-## ③ ブラウザでラボのサイトに行く
-- ブラウザに戻る  
-- PortSwigger ラボの **「ACCESS THE LAB」** をクリック  
+- PortSwigger ラボの「ACCESS THE LAB」をクリック
 - ラボサイトが開く
 
----
+## ③ 検索バーに「XSS」と入力して検索
 
-## ④ 検索バーに「XSS」と入力して検索
-- ラボサイトの検索バーに **XSS** と入力  
+- ラボサイトの検索バーに `XSS` と入力
 - Enter または検索ボタンを押す
 
----
+## ④ HTTP History でレスポンスを確認
 
-## ⑤ Burp に戻る
-- ブラウザが止まる（Intercept がリクエストを捕まえているため）  
 - Burp Suite に戻る
+- Proxy → HTTP History を開く
+- 検索のリクエストをクリック
+- Responseタブを見る
+- JSON の中に `"searchTerm":"XSS"` があるのを確認
+- → 入力が反射されている証拠
 
----
+## ⑤ Site Map で searchResults.js を見る
 
-## ⑥ Intercept タブで「Forward」を押す
-- Proxy → Intercept にリクエスト内容が表示されている  
-- **「Forward」** を押す  
-- 次のリクエストが来たらもう一度 Forward
+- Target → Site Map を開く
+- 左側のURLツリーからラボのドメインを展開
+- `searchResults.js` をクリック
+- 右側にJSコードが表示される
+- 中に `eval(` がある（危険なシンク）
 
----
+## ⑥ エスケープの確認（任意）
 
-## ⑦ レスポンスを見る
-- Intercept タブ上部の **「Request」/「Response」** 切り替えで  
-  **「Response」** を押す  
-- JSON の中に `"searchTerm":"XSS"` があるのを確認  
-  → 入力が反射されている証拠
+- 検索バーに `"` を入れて検索 → レスポンスで `\"` になる
+- 検索バーに `\` を入れて検索 → レスポンスで `\` のまま
+- → バックスラッシュがエスケープされていないことを確認
 
----
+## ⑦ ペイロードを入れる
 
-## ⑧ Site Map で searchResults.js を見る
-- Proxy 内の小タブ **「Site map」** をクリック  
-- 左側の URL ツリーからラボのドメインを展開  
-- **searchResults.js** をクリック  
-- 右側に JS コードが表示される  
-- 中に **`eval(`** がある（危険なシンク）
-
----
-
-## ⑨ エスケープの確認（任意）
-- 検索バーに **"** を入れて検索 → レスポンスで `\"` になる  
-- 検索バーに **\\** を入れて検索 → レスポンスで `\` のまま  
-  → バックスラッシュがエスケープされていないことを確認
-
----
-
-## ⑩ 本番のペイロードを入れる
-ブラウザに戻り、検索バーに以下を入力：
+- ブラウザに戻り、検索バーに以下を入力：
 
 ```
 \"-alert(1)}//
 ```
 
-Enter を押す
+- Enter を押す
 
----
+## ⑧ 確認
 
-## ⑪ Burp で Forward する
-- Intercept にリクエストが来ているので  
-  **「Forward」** を押す
-
----
-
-## ⑫ ブラウザで確認
-- ブラウザに戻る  
-- `alert(1)` のポップアップが出れば成功  
-- ラボが **Solved** になる
-
+- `alert(1)` のポップアップが出れば成功
+- ラボが Solved になる
 ---
 
 
