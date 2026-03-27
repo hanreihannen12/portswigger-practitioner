@@ -130,7 +130,7 @@ username=carlos&action=upgrade&confirmed=true
 ```http
 POST /admin-roles HTTP/2
 Host: xxxx.web-security-academy.net
-Cookie: session=WienerのセッションXXXXXXXX ← 変更!
+Cookie: session=Wienerのセッション ← 変更!
 Content-Length: XX
 
 username=wiener&action=upgrade&confirmed=true ← carlosをwienerに変更!
@@ -178,23 +178,6 @@ username=carlos&action=upgrade&confirmed=true
 ```
 → **`confirmed=true` が付いてるやつ!**
 
----
-
-## 📋 チェックリスト
-
-やる前に確認:
-- [ ] Burp Proxy → **Intercept is ON**
-- [ ] 管理者でログイン
-- [ ] Carlosの[Upgrade user]クリック
-- [ ] **1番目のPOSTリクエスト**をRepeaterに送る
-- [ ] [Yes]クリック
-- [ ] **2番目のPOSTリクエスト**(confirmed=true)をRepeaterに送る ← これ重要!
-- [ ] 管理者からログアウト
-- [ ] Wienerでログイン
-- [ ] WienerのセッションCookieをコピー
-- [ ] Repeaterで**2番目のリクエスト**を編集
-- [ ] username=wiener, Cookie=Wienerのセッション
-- [ ] Send!
 
 ---
 
