@@ -86,13 +86,11 @@ Burp Proxy → Intercept is ON のまま
 ブラウザで:
 Username: wiener
 Password: peter
-→ ログイン
+→ ログイン ここでBurpがリクエストをキャッチ:
 ```
 
 #### **Step 10: Wienerのセッションを取得**
 ```
-ログイン後、"My account" ページに移動しようとする
-→ Burpがリクエストをキャッチ:
 
 GET /my-account HTTP/2
 ...
