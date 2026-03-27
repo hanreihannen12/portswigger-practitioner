@@ -6,7 +6,6 @@
 #### **Step 1: Burp Suiteの設定**
 ```
 Burp Suite起動
-→ Proxy → Intercept is ON にする ← 今回は ON!
 ```
 
 #### **Step 2: 管理者でログイン**
@@ -51,7 +50,7 @@ username=carlos&action=upgrade
 "Are you sure?"
 [Yes] [No]
 
-"Yes" をクリック ← まだクリックしないで待つ!
+"Yes" をクリック 
 ```
 
 #### **Step 7: 2番目のPOSTリクエストをキャッチ**
