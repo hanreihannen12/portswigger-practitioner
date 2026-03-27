@@ -1,11 +1,8 @@
 
 ## STEP 1：ダミーログインでリクエストをキャプチャ
 
-1. Burp Suite を起動
-2. **Proxy タブ → Intercept → 「Intercept is on」** になってることを確認
-3. ブラウザでラボのログインページを開く
-4. Username に `test`、Password に `test` と入力して **「Log in」** をクリック
-5. Burp の Intercept 画面にリクエストが止まる
+1. Username に `test`、Password に `test` と入力して **「Log in」** をクリック
+2. Burp の Intercept 画面にリクエストが止まる
 6. リクエスト上で**右クリック → 「Send to Intruder」**
 7. **「Forward」ボタン**を押してリクエストを流す
 
