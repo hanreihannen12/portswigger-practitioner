@@ -72,17 +72,6 @@ Burp Intruder（Brute forcer or Cluster bomb）で自動化。
 
 ---
 
-## 🧩 まとめ（暗記用）
-> **「Error-based Blind SQL Injection は、通常のBlind SQLiが効かない状況で、  
-> 条件がTrueのときだけ意図的にSQLエラー（1/0など）を発生させ、  
-> HTTP 500 と 200 の差分から内部情報を推測する攻撃です。  
-> Oracleでは `CASE WHEN ... THEN TO_CHAR(1/0)` を使います。  
-> これを利用してパスワード長や各文字を1文字ずつ抽出できます。  
-> 対策はプリペアドステートメントの徹底、エラー非表示、レスポンス統一、  
-> そしてレート制限やWAFの導入です。」**
-
----
-
 
 
 # ⚡ まとめ
