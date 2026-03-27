@@ -172,7 +172,7 @@ temp-forgot-password-token=&username=carlos&new-password-1=hacked&new-password-2
 
 ---
 
-# 🛡 **4. どう対策する？（実務レベル）**
+# 🛡 **4. どう対策する？**
 
 ### 🔐 **必須対策**
 - **トークンをサーバ側で必ず検証する**
