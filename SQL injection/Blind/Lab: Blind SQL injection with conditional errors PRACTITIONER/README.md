@@ -87,7 +87,7 @@ Burp Intruder（Brute forcer or Cluster bomb）で自動化。
 
 # ⚡ まとめ
 
-```md
+
 この問題は Multi-step process の Broken Access Control です。
 管理者が操作すると2つのPOSTが送られますが、
 1つ目は確認画面を出すだけで、アクセス制御があります。
@@ -101,12 +101,6 @@ Burp Intruder（Brute forcer or Cluster bomb）で自動化。
 クライアント側パラメータを信用せず、
 状態遷移をサーバー側で厳密に管理することです。
 
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
 
 ---
 
