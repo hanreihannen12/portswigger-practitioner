@@ -162,7 +162,7 @@ mfa-code=§0000§
 他人の 2FA コードを生成できる Broken 2FA です。
 
 GET /login2 を carlos に書き換えるとサーバーが carlos の 2FA を発行し、
-POST /login2 も同様に書き換えられるため、4桁コードを Intruder で
+POST /login2 も同様に書き換えられるため、mfacodeの4桁コードを Intruder で
 0000〜9999 まで総当たりして突破できます。
 
 対策は、2FA の対象ユーザーをサーバー側セッションで固定し、
