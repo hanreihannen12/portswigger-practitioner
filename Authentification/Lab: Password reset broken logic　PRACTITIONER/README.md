@@ -184,11 +184,6 @@ temp-forgot-password-token=&username=carlos&new-password-1=hacked&new-password-2
 - username をリクエスト側から信用しない  
   → **トークンに紐づくユーザーをサーバ側で決定する**
 
-### 🧱 **追加の堅牢化**
-- トークンは十分長いランダム値にする
-- トークンは URL だけでなく Body にも送らせない（1箇所に統一）
-- レートリミット
-- ログ監査
 
 ---
 
